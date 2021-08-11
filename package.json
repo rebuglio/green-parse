@@ -1,0 +1,9 @@
+{
+  "name": "green-parse",
+  "version": "1.0.0",
+  "dependencies": {
+    "cbor": "^8.0.0",
+    "pako": "^2.0.4",
+    "base45": "^3.0.0"
+  }
+}

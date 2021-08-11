@@ -6,20 +6,51 @@
   porting from: https://github.com/hannob/vacdec
 */
 
-const b45data = ascii_from_qrcode.replace("HC1:", "")
+const cbor = require('cbor')
+const base45 = require('base45')
+const pako = require('pako')
+
+// Example qr code from https://github.com/eu-digital-green-certificates/dgc-testdata/tree/main/IT
+
+const exampleQR = "HC1:6BFOXN%TS3DH0YOJ58S S-W5HDC *M0II5XHC9B5G2+$N IOP-IA%NFQGRJPC%OQHIZC4.OI1RM8ZA.A5:S9MKN4NN3F85QNCY0O%0VZ001HOC9JU0D0HT0HB2PL/IB*09B9LW4T*8+DCMH0LDK2%K:XFE70*LP$V25$0Q:J:4MO1P0%0L0HD+9E/HY+4J6TH48S%4K.GJ2PT3QY:GQ3TE2I+-CPHN6D7LLK*2HG%89UV-0LZ 2ZJJ524-LH/CJTK96L6SR9MU9DHGZ%P WUQRENS431T1XCNCF+47AY0-IFO0500TGPN8F5G.41Q2E4T8ALW.INSV$ 07UV5SR+BNQHNML7 /KD3TU 4V*CAT3ZGLQMI/XI%ZJNSBBXK2:UG%UJMI:TU+MMPZ5$/PMX19UE:-PSR3/$NU44CBE6DQ3D7B0FBOFX0DV2DGMB$YPF62I$60/F$Z2I6IFX21XNI-LM%3/DF/U6Z9FEOJVRLVW6K$UG+BKK57:1+D10%4K83F+1VWD1NE"
+
+// remove prefix
+const b45data = exampleQR.replace("HC1:", "")
+
+// decode from base45
 const zlibdata = base45.decode(b45data)
-const cbordata = pako.inflate(zlibdata)
 
-// CBOR Web Token
-const cb = cbor.decodeFirstSync(cbordata)
+// unzip with zLib
+const cbor_cwt = pako.inflate(zlibdata)
 
-// EU Digital COVID Certificate
-const payload = cbor.decodeFirstSync(cb.value[2])
+/*
+  decode green pass (cbor)
 
-// If u need a key => value obj...
-const obj_payload = map2obj(payload)
+  CWT - Cbor Web Token scheme:
+  - 0 => Signature Algorithm (alg)
+  - 2 => Encoded payload (enc_payload)
+  - 3 => Key Identifier (kid)
+ */
+const cwt = cbor.decodeFirstSync(cbor_cwt)
+const alg = cwt.value[0]
+const enc_payload = cwt.value[2]
+const kid = cwt.value[3]
 
+/*
+  decode green pass payload (cbor again)
 
-const map2obj = map => map instanceof Map ?
+  Payload scheme:
+  - 1 => Issuer (iss, claim key 1, optional, ISO 3166-1 alpha-2 of issuer)
+  - 6 => Issued At (iat, claim key 6)
+  - 4 => Expiration Time (exp, claim key 4)
+  - -260 => Health Certificate (hcert, claim key -260)
+ */
+const map_payload = cbor.decodeFirstSync(enc_payload)
+const payload = map2obj(map_payload) // little transform, from js Map to JSON
+const health_cert = payload[-260]
+
+console.log(health_cert)
+
+function map2obj (map) { return map instanceof Map ?
     Object.fromEntries([...map.keys()].map(
-        k => [k, map2obj(map.get(k))])) : map
+        k => [k, map2obj(map.get(k))])) : map }
