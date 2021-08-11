@@ -7,6 +7,8 @@ Pure-JS Green Pass Reader - EU Digital COVID Certificates (EUDCC) Reader
 
 Porting from [vacdec](https://github.com/hannob/vacdec) by hannob.
 
+Information about generated JSON: [covid-certificate_json_specification_en.pdf]( https://ec.europa.eu/health/sites/default/files/ehealth/docs/covid-certificate_json_specification_en.pdf)
+
 ## Demo
 
 [certverde.it](https://certverde.it)
