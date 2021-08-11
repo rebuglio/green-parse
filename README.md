@@ -11,6 +11,27 @@ Porting from [vacdec](https://github.com/hannob/vacdec) by hannob.
 
 [certverde.it](https://certverde.it)
 
+## The Code
+
+```
+// Remove header
+const b45data = ascii_from_qrcode.replace("HC1:", "")
+
+// Decode from base45
+const zlibdata = base45.decode(b45data)
+
+// Unzip with zLib
+const cbordata = pako.inflate(zlibdata)
+
+// CBOR Web Token
+const cb = cbor.decodeFirstSync(cbordata)
+
+// EU Digital COVID Certificate in "Map" format
+const payload = cbor.decodeFirstSync(cb.value[2])
+
+// if you prefer javascript object (key => value) format, take a look of map2obj in  green-parse.js
+```
+
 ## Dependencies
 
 Package.json format:
