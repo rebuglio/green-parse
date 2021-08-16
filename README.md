@@ -5,12 +5,15 @@ Green PaRsE
 
 Pure-JS Green Pass Reader - EU Digital COVID Certificates (EUDCC) Reader and verifier
 
-#### :warning: this code is only a draft for scientific and statistical use. If people's safety is at stake, use your country's official app.
+> #### :warning: this code is only a draft for scientific and statistical use. If people's safety is at stake, use one of the government official app.
 
 ## Demo
 
 > Decode only, online: [certverde.it](https://certverde.it)
 
+- Install dependencies: `npm install`
+- Decode: `node decode_only.js`
+- Decode e verify: `node decode_and_verify.js`
 
 
 ## The Code
