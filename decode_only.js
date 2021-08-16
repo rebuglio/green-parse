@@ -1,14 +1,14 @@
 
 /*
   Green-Parse! https://github.com/rebuglio/green-parse
-  Parse a Green Pass in pure-JS
+  Parse (... and verify signature) a Green Pass in pure-JS
 
   porting from: https://github.com/hannob/vacdec
 */
 
-const cbor = require('cbor')
 const base45 = require('base45')
 const pako = require('pako')
+const {cbor} = require("cbor");
 
 // Example qr code from https://github.com/eu-digital-green-certificates/dgc-testdata/tree/main/IT
 
@@ -24,17 +24,13 @@ const zlibdata = base45.decode(b45data)
 const cbor_cwt = pako.inflate(zlibdata)
 
 /*
-  decode green pass (cbor)
-
-  CWT - Cbor Web Token scheme:
-  - 0 => Signature Algorithm (alg)
-  - 2 => Encoded payload (enc_payload)
-  - 3 => Key Identifier (kid)
+  decode CWT - Cbor Web Token scheme:
+  - 0 => Protected header, cbor encoded. Format: {1:alg, 4:kid}
+  - 1 => Unprotected header (empty)
+  - 2 => Payload (enc_payload), cbor encoded
+  - 3 => Signature
  */
-const cwt = cbor.decodeFirstSync(cbor_cwt)
-const alg = cwt.value[0]
-const enc_payload = cwt.value[2]
-const kid = cwt.value[3]
+const [header, , enc_payload, sig] = cbor.decodeFirstSync(cbor_cwt)
 
 /*
   decode green pass payload (cbor again)
