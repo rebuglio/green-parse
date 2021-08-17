@@ -67,7 +67,7 @@ ALERT: with `testkeys.json` you can test this script, contains italian governmen
 Similar project:
 -  [vacdec](https://github.com/hannob/vacdec) by hannob, simple python script decode-only
 -  [vacdec fork](https://github.com/HQJaTu/vacdec) by HQJaTu, complete python libraries decoding and verifying
--  [sanipasse](https://github.com/lovasoa/sanipasse) by french government, official JS webapp decoding and verifying
+-  [sanipasse](https://github.com/lovasoa/sanipasse) by lovasoa, great JS webapp decoding and verifying
 
 Information about generated JSON: [covid-certificate_json_specification_en.pdf]( https://ec.europa.eu/health/sites/default/files/ehealth/docs/covid-certificate_json_specification_en.pdf)
 
