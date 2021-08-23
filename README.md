@@ -65,6 +65,7 @@ ALERT: with `testkeys.json` you can test this script, contains italian governmen
 ## About
 
 Similar project:
+-  [dcc-utils](https://github.com/ministero-salute/dcc-utils) by italian ministry of health, official set of js utils
 -  [vacdec](https://github.com/hannob/vacdec) by hannob, simple python script decode-only
 -  [vacdec fork](https://github.com/HQJaTu/vacdec) by HQJaTu, complete python libraries decoding and verifying
 -  [sanipasse](https://github.com/lovasoa/sanipasse) by lovasoa, great JS webapp decoding and verifying
